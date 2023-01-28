@@ -1,3 +1,4 @@
-# med-track
-TAMU Hack 2023
+# Medicine Tracking - TAMU Hack 2023
+Description:
+Technologies: React, Flask, MongoDB
 
