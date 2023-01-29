@@ -412,7 +412,11 @@ function App() {
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto"></Nav>
                         <Nav>
-                            <Nav.Link onClick={handleShow}>Login</Nav.Link>
+                            {localStorage.getItem("email") === null ? (
+                                    <Nav.Link onClick={handleShow}>Login</Nav.Link>
+                                ) : (
+                                ""
+                            )}
                             <Modal show={show} onHide={handleClose}>
                                 <Modal.Header closeButton>
                                     <Modal.Title>Login</Modal.Title>
@@ -456,8 +460,18 @@ function App() {
                                     </Form>
                                 </Modal.Body>
                             </Modal>
-                            <Signup />
+                            {localStorage.getItem("email") === null ? (
+                                <Signup />):("")}
+                            {localStorage.getItem("email") === null ? 
+                                ""
+                            : (
+                            <Nav.Link>{username}</Nav.Link>
+                            )}
+                            {localStorage.getItem("email") === null ? 
+                                ""
+                            : (
                             <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                            )}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
@@ -492,7 +506,7 @@ function App() {
                     </div>
 
                     <div className="form">
-                        <Card style={{ width: "30rem" }}>
+                        <Card style={{ width: "30rem"}}>
                             <Card.Body>
                                 <Card.Title>Pill Suggestion</Card.Title>
                                 <Card.Text>

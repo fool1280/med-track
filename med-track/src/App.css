@@ -1,4 +1,5 @@
 .page {
+    background-image: linear-gradient(to left, blue, white);
     height:100vh;
     display: flex;
     flex-direction: column;
@@ -29,6 +30,7 @@
 }
 
 .form {
+    box-shadow: 15px 15px 10px 10px darkblue;
     margin: 20px;
 }
 
