@@ -8,7 +8,6 @@ import Form from 'react-bootstrap/Form';
 import React, {useState} from 'react';
 import {useEffect} from 'react';
 
-
 export default function App() {
 
   const [initialValues, setInitialValues] = useState({
@@ -31,7 +30,7 @@ export default function App() {
 
   return (
   <div>
-
+    
 <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Container style={{paddingLeft: 10, paddingRight: 10, margin: 0, maxWidth: 2000}}>
           <Navbar.Brand href="#home">Med Tracker</Navbar.Brand>
