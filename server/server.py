@@ -2,16 +2,18 @@ from flask import Flask, Response, request
 from flask_pymongo import PyMongo
 from flask_cors import CORS
 from bson import json_util
+from pymongo import TEXT
 
 app = Flask(__name__)
 CORS(app)
 mongodb_client = PyMongo(app, uri = "mongodb+srv://anguyen:Thieulam10@cluster0.qaxvq.mongodb.net/tamu-hack-2023")
 db = mongodb_client.db
+db["medication"].create_index([("name", TEXT), ("desc", TEXT), ("symptoms", TEXT)])
 
 # Database: medicine database
 # name
-# max_amount_per_day
-# description
+# max__per_day
+# desc
 # symptoms
 
 # Database: record
@@ -47,9 +49,11 @@ def get_all_medicines():
 @app.route("/search-a-medicine")
 def search_a_medicine():
     query = request.args.get('query')
-    print(query)
+    medication = db["medication"].find( 
+        {"$text": { "$search": query }} 
+    )
     return Response(
-        json_util.dumps("Success"),
+        json_util.dumps(medication),
         mimetype='application/json'
     )
 
