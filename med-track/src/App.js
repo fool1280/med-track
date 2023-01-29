@@ -9,13 +9,15 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Table from "react-bootstrap/Table";
 import ToggleButton from 'react-bootstrap/ToggleButton';
-
+import Form from "react-bootstrap/Form";
 
 function ModalForPill() {
     const [show, setShow] = useState(false);
     const [querySearch, setQuerySearch] = useState("");
     const [updated, setUpdated] = useState(querySearch);
     const [listAllDrugs, setListAllDrugs] = useState([]);
+    const [data, setData] = useState([]);
+    const username = "admin@gmail.com";
 
     const handleClose = () => {
         setShow(false);
@@ -28,6 +30,46 @@ function ModalForPill() {
     };
     const handleClick = () => {
         setUpdated(querySearch);
+    };
+    const handleUpdateForm = (medicine_name, key, value) => {
+        let newData = data;
+        if (medicine_name in newData === false) {
+            newData[medicine_name] = [0, 0]; // [stopped_date, times_of_day]
+        }
+        console.log("Medicine name:", medicine_name);
+        console.log("Key:", key);
+        console.log("Value:", value);
+        if (key === "stopped_date") {
+            newData[medicine_name][0] = Date.parse(value);
+        }
+        if (key === "times_of_day") {
+            newData[medicine_name][1] = value;
+        }
+        setData(newData);
+    };
+
+    const handleCloseAndSubmit = () => {
+        handleClose();
+        for (let key in data) {
+            if (data[key][1] === 0 || data[key][0] === 0) {
+                continue;
+            }
+            let record = {
+                username: username,
+                medicine: key,
+                times_of_day: data[key][1],
+                stopped_date: data[key][0],
+            };
+            const requestOptions = {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ record }),
+            };
+            fetch("http://127.0.0.1:8000/add-medicine", requestOptions).then(
+                (response) => console.log(response)
+            );
+        }
+        setData([]);
     };
 
     const fetchData = useCallback(async () => {
@@ -74,14 +116,68 @@ function ModalForPill() {
                         <tbody>
                             {listAllDrugs.map((item, index) => {
                                 return (
-                                    <tr>
+                                    <tr key={index}>
                                         <td>{index + 1}</td>
                                         <td
                                             style={{
                                                 wordBreak: "keep-all",
                                             }}
                                         >
-                                            {listAllDrugs[index]["name"]}
+                                            <Form>
+                                                <span>
+                                                    {
+                                                        listAllDrugs[index][
+                                                            "name"
+                                                        ]
+                                                    }
+                                                </span>
+                                                <Form.Group
+                                                    className="mb-3"
+                                                    controlId="formBasicEmail"
+                                                >
+                                                    <Form.Control
+                                                        type="number"
+                                                        placeholder="Amount per day"
+                                                        max={
+                                                            listAllDrugs[index][
+                                                                "max_per_day"
+                                                            ]
+                                                        }
+                                                        step="1"
+                                                        min="0"
+                                                        onChange={(e) =>
+                                                            handleUpdateForm(
+                                                                listAllDrugs[
+                                                                    index
+                                                                ]["name"],
+                                                                "times_of_day",
+                                                                e.target
+                                                                    .valueAsNumber
+                                                            )
+                                                        }
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group>
+                                                    <span>
+                                                        Select finish date:
+                                                    </span>
+                                                    <Form.Control
+                                                        type="date"
+                                                        min={new Date()
+                                                            .toISOString()
+                                                            .slice(0, 10)}
+                                                        onChange={(e) =>
+                                                            handleUpdateForm(
+                                                                listAllDrugs[
+                                                                    index
+                                                                ]["name"],
+                                                                "stopped_date",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                    />
+                                                </Form.Group>
+                                            </Form>
                                         </td>
                                         <td
                                             style={{
@@ -116,6 +212,9 @@ function ModalForPill() {
                 <Modal.Footer>
                     <Button variant="primary" onClick={handleClose}>
                         Close
+                    </Button>
+                    <Button variant="primary" onClick={handleCloseAndSubmit}>
+                        Submit
                     </Button>
                 </Modal.Footer>
             </Modal>
