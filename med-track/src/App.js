@@ -286,22 +286,19 @@ function ModalForSchedule({ username }) {
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Time</th>
-                                {/* <th>Done</th> */}
+                                <th>Done</th>
                             </tr>
                         </thead>
                         <tbody>
                             {data.map((item, index) => {
+                                console.log(check[index]);
                                 return (
                                     <tr key={index}>
                                         <th>{index + 1}</th>
                                         <th>{item["name"]}</th>
                                         <th>{item["time"] + ":00"}</th>
+                                        <th>{check[index]}</th>
                                     </tr>
-                                    // <tr key={index}>
-                                    //     <th>{index + 1}</th>
-                                    //     <th>{item["medicine"]}</th>
-                                    //     <th>{item["times_of_day"] + ":00"}</th>
-                                    // </tr>
                                 );
                             })}
                         </tbody>
@@ -384,7 +381,7 @@ function App() {
     };
     const handleClick = () => {
         setUpdated(querySearch);
-        localStorage.setItem("email", username);
+        localStorage.setItem("email", querySearch);
         handleClose();
     };
     const handleLogout = () => {
@@ -482,7 +479,8 @@ function App() {
                                     Sign up now and let the good times roll
                                     (while feeling great, of course!)
                                 </Card.Text>
-                                {localStorage.getItem("email") === null ? (
+                                {localStorage.getItem("email") === null ||
+                                localStorage.getItem("email").length === 0 ? (
                                     ""
                                 ) : (
                                     <ModalForSchedule username={username} />
