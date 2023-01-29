@@ -1,9 +1,37 @@
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+
 import './Login.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 function App() {
   return (
+  <div>
+
+<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Container>
+          <Navbar.Brand href="#home">Med Tracker</Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link href="#features">Home</Nav.Link>
+              <Nav.Link href="#pricing">Schedule</Nav.Link>
+              <Nav.Link href="#bruh">Pill Finder</Nav.Link>
+            </Nav>
+            <Nav>
+              <Nav.Link href="#deets">Login</Nav.Link>
+              <Nav.Link eventKey={2} href="#memes">
+                Sign up
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
+
+
     <Form className="main">
       <div className="sub">
         <div className="Login">
@@ -38,6 +66,10 @@ function App() {
 
       </div>
     </Form>
+
+
+
+      </div>
   );
 }
 
