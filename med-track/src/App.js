@@ -222,7 +222,7 @@ function ModalForPill() {
 }
 
 function ModalForSchedule({ username }) {
-    console.log("Username: ", username);
+    console.log("Username in schedule: ", username);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -252,11 +252,11 @@ function ModalForSchedule({ username }) {
 
     const fetchData = useCallback(async () => {
         const data = await fetch(
-            "http://127.0.0.1:8000/get-record?query=a@gmail.com"
+            "http://127.0.0.1:8000/get-record?query=" + username
         );
         const json = await data.json();
         setData(convertData(json));
-    }, []);
+    }, [username]);
 
     useEffect(() => {
         fetchData().catch(console.error);
@@ -373,8 +373,12 @@ function App() {
     };
     const handleClick = () => {
         setUpdated(querySearch);
+        handleClose();
     };
 
+    useEffect(() => {
+        console.log("Current username:", username);
+    }, [username]);
     return (
         <div className="page">
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -427,8 +431,8 @@ function App() {
                                         </Form.Group>
                                         <Button
                                             variant="primary"
-                                            type="submit"
-                                            onChange={handleClick}
+                                            type="button"
+                                            onClick={handleClick}
                                         >
                                             Submit
                                         </Button>
