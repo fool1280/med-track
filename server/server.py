@@ -44,7 +44,11 @@ def get_all_medicines():
 def search_a_medicine():
     query = request.args.get('query')
     if query == "":
-        abort(404)
+        medications = db["medication"].find({})
+        return Response(
+            json_util.dumps(medications),
+            mimetype='application/json'
+        )
     medication = db["medication"].find({"$text": { "$search": query }})
     return Response(
         json_util.dumps(medication),

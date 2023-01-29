@@ -10,9 +10,15 @@ import Modal from "react-bootstrap/Modal";
 
 function ModalForPill() {
     const [show, setShow] = useState(false);
+    const [querySearch, setQuerySearch] = useState("");
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const handleChange = (event) => {
+        console.log("Input", event.target.value);
+        setQuerySearch(event.target.value);
+        console.log(querySearch);
+    };
 
     return (
         <>
@@ -22,10 +28,14 @@ function ModalForPill() {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title>List of common mediciations</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <input />
+                    <input
+                        type={"text"}
+                        value={querySearch}
+                        onChange={handleChange}
+                    />
                     <div>Woohoo, you're reading this text in a modal!</div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -43,7 +53,7 @@ function ModalForPill() {
 
 function App() {
     return (
-        <div class="page">
+        <div className="page">
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                 <Container
                     style={{
@@ -68,13 +78,15 @@ function App() {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <div class="mid">
-                <div class="left">
-                    <div class="title">Med Tracker</div>
-                    <div class="description">The fastest way to recovery</div>
+            <div className="mid">
+                <div className="left">
+                    <div className="title">Med Tracker</div>
+                    <div className="description">
+                        The fastest way to recovery
+                    </div>
                 </div>
-                <div class="longDescription">
-                    <div class="form">
+                <div className="longDescription">
+                    <div className="form">
                         <Card style={{ width: "30rem" }}>
                             <Card.Body>
                                 <Card.Title>Scheduling</Card.Title>
@@ -91,7 +103,7 @@ function App() {
                         </Card>
                     </div>
 
-                    <div class="form">
+                    <div className="form">
                         <Card style={{ width: "30rem" }}>
                             <Card.Body>
                                 <Card.Title>Pill Suggestion</Card.Title>
