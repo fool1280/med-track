@@ -221,7 +221,7 @@ function ModalForPill() {
     );
 }
 
-function ModalForSchedule(props) {
+function ModalForSchedule() {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -268,26 +268,17 @@ function ModalForSchedule(props) {
     //     [medTime]
     // );
 
-    // const fetchData = useCallback(async () => {
-    //     // if ("email" in localStorage) {
-    //     //     console.log(
-    //     //         "Email in localStorage: ",
-    //     //         localStorage.getItem("email")
-    //     //     );
-    //     //     setUsername(localStorage.getItem("email"));
-    //     //     console.log("Username: ", username);
-    //     // }
-    //     const data = await fetch(
-    //         "http://127.0.0.1:8000/search-a-medicine?query=admin@gmail.com"
-    //     );
-    //     const json = await data.json();
-    //     setData(json);
-    //     // console.log(data);
-    // }, []);
+    const fetchData = useCallback(async () => {
+        const data = await fetch(
+            "http://127.0.0.1:8000/search-a-medicine?query=admin@gmail.com"
+        );
+        const json = await data.json();
+        setData(json);
+    }, []);
 
-    // useEffect(() => {
-    //     fetchData().catch(console.error);
-    // }, [fetchData]);
+    useEffect(() => {
+        fetchData().catch(console.error);
+    }, [fetchData]);
 
     return (
         <>
@@ -337,102 +328,72 @@ function ModalForSchedule(props) {
     );
 }
 
-function SigninForm() {
-    return (
-      <Form>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" />
-          <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
-          </Form.Text>
-        </Form.Group>
-  
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" />
-        </Form.Group>
-        <Button variant="primary" type="submit" onChange={(event) => {
-            console.log(1);     
-        }}> 
-          Submit
-        </Button>
-      </Form>
-    );
-}
 function SignupForm() {
     return (
-      <Form>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" />
-          <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
-          </Form.Text>
-        </Form.Group>
-  
-        <Form.Group className="mb-3" controlId="formBa  sicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" 
-                        value="this.value.val"/>
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
-    );
-  }
-  
-function Login() {
-    const [show, setShow] = useState(false);
-  
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-  
-    return (
-      <>
-        <Button variant="primary" onClick={handleShow}>
-          Login
-        </Button>
-  
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Login</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <SigninForm/>
-          </Modal.Body>
-        </Modal>
-      </>
-    );
-  }
+        <Form>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label>Email address</Form.Label>
+                <Form.Control type="email" placeholder="Enter email" />
+                <Form.Text className="text-muted">
+                    We'll never share your email with anyone else.
+                </Form.Text>
+            </Form.Group>
 
-  function Signup() {
+            <Form.Group className="mb-3" controlId="formBa  sicPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    value="this.value.val"
+                />
+            </Form.Group>
+            <Button variant="primary" type="submit">
+                Submit
+            </Button>
+        </Form>
+    );
+}
+
+function Signup() {
     const [show, setShow] = useState(false);
-  
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-  
+
     return (
-      <>
-        <Button variant="primary" onClick={handleShow}>
-          Signup
-        </Button>
-  
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Signup</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <SignupForm/>
-          </Modal.Body>
-        </Modal>
-      </>
+        <>
+            <Button variant="primary" onClick={handleShow}>
+                Signup
+            </Button>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Signup</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <SignupForm />
+                </Modal.Body>
+            </Modal>
+        </>
     );
-  }
+}
 
 function App() {
-    const [username, setUsername] = useState("admin@gmail.com");
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const [querySearch, setQuerySearch] = useState("");
+    const [username, setUpdated] = useState(querySearch);
+
+    const handleChange = (event) => {
+        console.log("Email typing: ", event.target.value);
+        setQuerySearch(event.target.value);
+    };
+    const handleClick = () => {
+        setUpdated(querySearch);
+    };
 
     return (
         <div className="page">
@@ -450,8 +411,54 @@ function App() {
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto"></Nav>
                         <Nav>
-                            <Login/>
-                            <Signup/>
+                            <Button variant="primary" onClick={handleShow}>
+                                Login
+                            </Button>
+
+                            <Modal show={show} onHide={handleClose}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Login</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <Form>
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="formBasicEmail"
+                                        >
+                                            <Form.Label>
+                                                Email address
+                                            </Form.Label>
+                                            <Form.Control
+                                                type="email"
+                                                onChange={handleChange}
+                                            />
+                                            <Form.Text className="text-muted">
+                                                We'll never share your email
+                                                with anyone else.
+                                            </Form.Text>
+                                        </Form.Group>
+
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="formBasicPassword"
+                                        >
+                                            <Form.Label>Password</Form.Label>
+                                            <Form.Control
+                                                type="password"
+                                                placeholder="Password"
+                                            />
+                                        </Form.Group>
+                                        <Button
+                                            variant="primary"
+                                            type="submit"
+                                            onChange={handleClick}
+                                        >
+                                            Submit
+                                        </Button>
+                                    </Form>
+                                </Modal.Body>
+                            </Modal>
+                            <Signup />
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
@@ -479,7 +486,9 @@ function App() {
                                 {localStorage.getItem("email") === null ? (
                                     ""
                                 ) : (
-                                    <ModalForSchedule />
+                                    <ModalForSchedule
+                                        username={this.username}
+                                    />
                                 )}
                             </Card.Body>
                         </Card>
