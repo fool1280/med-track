@@ -222,45 +222,40 @@ function ModalForPill() {
 }
 
 function ModalForSchedule({ username }) {
-    console.log(username);
+    console.log("Username: ", username);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    // const [medTime, setMedTime] = useState([]);
     const [data, setData] = useState([]);
 
-    // const convertData = useCallback(
-    //     (data) => {
-    //         console.log("Data: ", data);
-    //         let newMedTime = [];
-    //         for (let i = 0; i < data.length; i++) {
-    //             console.log("Data at " + i, data[i]);
-    //             let n = data[i]["times_of_day"];
-    //             if (n === 1) {
-    //                 newMedTime.push({ name: data[i]["medicine"], time: 12 });
-    //             } else {
-    //                 for (let j = 0; j < n; j++) {
-    //                     newMedTime.push({
-    //                         name: data[i]["medicine"],
-    //                         time: Math.round(8 + (14 / (n - 1)) * j),
-    //                     });
-    //                 }
-    //             }
-    //         }
-    //         console.log("NewMedTime: ", newMedTime);
-    //         newMedTime.sort((a, b) => a["time"] - b["time"]);
-    //         setMedTime(newMedTime);
-    //         console.log("MedTime: ", medTime);
-    //     },
-    //     [medTime]
-    // );
+    const convertData = (data) => {
+        console.log("Data: ", data);
+        let newMedTime = [];
+        for (let i = 0; i < data.length; i++) {
+            console.log("Data at " + i, data[i]);
+            let n = data[i]["times_of_day"];
+            if (n === 1) {
+                newMedTime.push({ name: data[i]["medicine"], time: 12 });
+            } else {
+                for (let j = 0; j < n; j++) {
+                    newMedTime.push({
+                        name: data[i]["medicine"],
+                        time: Math.round(8 + (14 / (n - 1)) * j),
+                    });
+                }
+            }
+        }
+        console.log("NewMedTime: ", newMedTime);
+        newMedTime.sort((a, b) => a["time"] - b["time"]);
+        return newMedTime;
+    };
 
     const fetchData = useCallback(async () => {
         const data = await fetch(
-            "http://127.0.0.1:8000/get-record?query=admin@gmail.com"
+            "http://127.0.0.1:8000/get-record?query=a@gmail.com"
         );
         const json = await data.json();
-        setData(json);
+        setData(convertData(json));
     }, []);
 
     useEffect(() => {
@@ -289,18 +284,17 @@ function ModalForSchedule({ username }) {
                         </thead>
                         <tbody>
                             {data.map((item, index) => {
-                                console.log(item);
                                 return (
-                                    // <tr key={index}>
-                                    //     <th>{index + 1}</th>
-                                    //     <th>{item["name"]}</th>
-                                    //     <th>{item["time"] + ":00"}</th>
-                                    // </tr>
                                     <tr key={index}>
                                         <th>{index + 1}</th>
-                                        <th>{item["medicine"]}</th>
-                                        <th>{item["times_of_day"] + ":00"}</th>
+                                        <th>{item["name"]}</th>
+                                        <th>{item["time"] + ":00"}</th>
                                     </tr>
+                                    // <tr key={index}>
+                                    //     <th>{index + 1}</th>
+                                    //     <th>{item["medicine"]}</th>
+                                    //     <th>{item["times_of_day"] + ":00"}</th>
+                                    // </tr>
                                 );
                             })}
                         </tbody>
