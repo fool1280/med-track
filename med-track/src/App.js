@@ -4,13 +4,14 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Card from "react-bootstrap/Card";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 function ModalForPill() {
     const [show, setShow] = useState(false);
-    const [querySearch, setQuerySearch] = useState("");
+    const [querySearch, setQuerySearch] = useState("all");
+    const [listAllDrugs, setListAllDrugs] = useState([]);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -18,9 +19,21 @@ function ModalForPill() {
         setQuerySearch(event.target.value);
     };
 
-    useEffect(() => {
+    const fetchData = useCallback(async () => {
+        const data = await fetch(
+            "http://127.0.0.1:8000/search-a-medicine?query=" + querySearch
+        );
+        const json = await data.json();
+        setListAllDrugs(json);
+
         console.log("Query: ", querySearch);
-    }, [querySearch]);
+        console.log(listAllDrugs);
+    }, [querySearch, listAllDrugs]);
+
+    useEffect(() => {
+        fetchData().catch(console.error);
+    }, [fetchData]);
+
     return (
         <>
             <Button variant="primary" onClick={handleShow}>
@@ -36,7 +49,7 @@ function ModalForPill() {
                         Search query:
                         <input
                             type={"text"}
-                            value={querySearch}
+                            defaultValue=""
                             onChange={handleChange}
                             placeholder={"Symptoms, name, etc..."}
                         />
