@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Card from "react-bootstrap/Card";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useReducer } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Table from "react-bootstrap/Table";
@@ -228,6 +228,17 @@ function ModalForSchedule({ username }) {
     const handleShow = () => setShow(true);
     const [data, setData] = useState([]);
     const [check, setCheck] = useState({});
+    const [, forceUpdate] = useReducer((x) => x + 1, 0);
+
+    const handleUpdate = (index) => {
+        console.log("Index in Update: ", index);
+        console.log("Check before:", check);
+        let newCheck = check;
+        newCheck[index] = false;
+        setCheck(newCheck);
+        console.log("Check after:", check);
+        forceUpdate();
+    };
 
     const convertData = (data) => {
         console.log("Data: ", data);
@@ -239,14 +250,14 @@ function ModalForSchedule({ username }) {
             let n = data[i]["times_of_day"];
             if (n === 1) {
                 newMedTime.push({ name: data[i]["medicine"], time: 12 });
-                newCheck[count++] = false;
+                newCheck[count++] = true;
             } else {
                 for (let j = 0; j < n; j++) {
                     newMedTime.push({
                         name: data[i]["medicine"],
                         time: Math.round(8 + (14 / (n - 1)) * j),
                     });
-                    newCheck[count++] = false;
+                    newCheck[count++] = true;
                 }
             }
         }
@@ -297,7 +308,19 @@ function ModalForSchedule({ username }) {
                                         <th>{index + 1}</th>
                                         <th>{item["name"]}</th>
                                         <th>{item["time"] + ":00"}</th>
-                                        <th>{check[index]}</th>
+                                        <th>
+                                            <Form>
+                                                <Form.Check
+                                                    type="switch"
+                                                    id="custom-switch"
+                                                    label="Complete"
+                                                    checked={!check[index - 0]}
+                                                    onChange={() =>
+                                                        handleUpdate(index - 0)
+                                                    }
+                                                />
+                                            </Form>
+                                        </th>
                                     </tr>
                                 );
                             })}
