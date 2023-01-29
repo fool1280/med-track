@@ -39,8 +39,6 @@ export default function App() {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link href="#features">Home</Nav.Link>
-              <Nav.Link href="#pricing">Schedule</Nav.Link>
-              <Nav.Link href="#bruh">Pill Finder</Nav.Link>
             </Nav>
             <Nav>
               <Nav.Link href="#deets">Login</Nav.Link>
