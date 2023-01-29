@@ -221,26 +221,13 @@ function ModalForPill() {
     );
 }
 
-function ModalForSchedule() {
+function ModalForSchedule({ username }) {
+    console.log(username);
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const [medTime, setMedTime] = useState([]);
+    // const [medTime, setMedTime] = useState([]);
     const [data, setData] = useState([]);
-
-    // const fetchData = useCallback(async () => {
-    //     let username =
-    //         localStorage.getItem("email") === null
-    //             ? "admin@gmail.com"
-    //             : localStorage.getItem("email");
-    //     console.log("Current username: ", username);
-    //     const res = await fetch(
-    //         "http://127.0.0.1:8000/get-record?query=" + username
-    //     );
-    //     const json = await res.json();
-    //     setData(json);
-    // }, []);
 
     // const convertData = useCallback(
     //     (data) => {
@@ -270,7 +257,7 @@ function ModalForSchedule() {
 
     const fetchData = useCallback(async () => {
         const data = await fetch(
-            "http://127.0.0.1:8000/search-a-medicine?query=admin@gmail.com"
+            "http://127.0.0.1:8000/get-record?query=admin@gmail.com"
         );
         const json = await data.json();
         setData(json);
@@ -302,6 +289,7 @@ function ModalForSchedule() {
                         </thead>
                         <tbody>
                             {data.map((item, index) => {
+                                console.log(item);
                                 return (
                                     // <tr key={index}>
                                     //     <th>{index + 1}</th>
@@ -486,9 +474,7 @@ function App() {
                                 {localStorage.getItem("email") === null ? (
                                     ""
                                 ) : (
-                                    <ModalForSchedule
-                                        username={this.username}
-                                    />
+                                    <ModalForSchedule username={username} />
                                 )}
                             </Card.Body>
                         </Card>
