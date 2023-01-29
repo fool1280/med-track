@@ -12,19 +12,22 @@ import {useEffect} from 'react';
 export default function App() {
 
   const [initialValues, setInitialValues] = useState({
-    username:"",
-    password:""
+    username:'',
+    password:''
   });
   const [formValues, setFormValues] = useState([]);
 
   const submitForm = () => {
+    console.log(initialValues)
     setFormValues((prevFormValues) => [...prevFormValues,initialValues]);
   };
 
   useEffect(() => {
     localStorage.setItem("formValues",JSON.stringify(formValues));
+    console.log(localStorage)
   }, [formValues]);
 
+  
 
   return (
   <div>
@@ -90,11 +93,10 @@ export default function App() {
         </Form.Group>
 
         <div className="Button">
-        <Button variant="primary" type="submit" onclick={submitForm}>
+        <Button variant="primary" type="submit" onClick={submitForm}>
           Login
         </Button>
         </div>
-
       </div>
     </Form>
 
