@@ -49,3 +49,6 @@
     flex-direction: column;
     align-items: left;
 }
+.cl {
+    word-break: "break-all";
+}
