@@ -8,7 +8,6 @@ import React, { useEffect, useState, useCallback } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Table from "react-bootstrap/Table";
-import ToggleButton from 'react-bootstrap/ToggleButton';
 import Form from "react-bootstrap/Form";
 
 function ModalForPill() {
@@ -17,7 +16,6 @@ function ModalForPill() {
     const [updated, setUpdated] = useState(querySearch);
     const [listAllDrugs, setListAllDrugs] = useState([]);
     const [data, setData] = useState([]);
-    const username = "admin@gmail.com";
 
     const handleClose = () => {
         setShow(false);
@@ -54,8 +52,9 @@ function ModalForPill() {
             if (data[key][1] === 0 || data[key][0] === 0) {
                 continue;
             }
+            let x = localStorage.getItem("email");
             let record = {
-                username: username,
+                username: x === null ? "admin@gmail.com" : x,
                 medicine: key,
                 times_of_day: data[key][1],
                 stopped_date: data[key][0],
@@ -222,93 +221,125 @@ function ModalForPill() {
     );
 }
 
-function ModalForSchedule() {
+function ModalForSchedule(props) {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    // const [checkArray, setCheckArray] = useState([])
-    const [data, setData] = useState([{'name': 'asdf;lkj', 'num': 4}, {'name': 'fdf', 'num':1}]);
-    
-    const medTime=[];
-    for (let i = 0; i < data.length; i++) {
-        let n = data[i]['num'];
-        if (n === 1) {
-            medTime.push({"name": data[i]["name"], "time": 12});
-        }
-        else {
-            for (let j = 0;j < n; j++) {
-                medTime.push({"name": data[i]["name"], "time": Math.round(8 + 14 / (n - 1) * j)})
-            }
-        }
-    }
+    const [medTime, setMedTime] = useState([]);
+    const [data, setData] = useState([]);
 
-    medTime.sort((a, b) => a["time"] - b["time"]);
+    // const fetchData = useCallback(async () => {
+    //     let username =
+    //         localStorage.getItem("email") === null
+    //             ? "admin@gmail.com"
+    //             : localStorage.getItem("email");
+    //     console.log("Current username: ", username);
+    //     const res = await fetch(
+    //         "http://127.0.0.1:8000/get-record?query=" + username
+    //     );
+    //     const json = await res.json();
+    //     setData(json);
+    // }, []);
+
+    // const convertData = useCallback(
+    //     (data) => {
+    //         console.log("Data: ", data);
+    //         let newMedTime = [];
+    //         for (let i = 0; i < data.length; i++) {
+    //             console.log("Data at " + i, data[i]);
+    //             let n = data[i]["times_of_day"];
+    //             if (n === 1) {
+    //                 newMedTime.push({ name: data[i]["medicine"], time: 12 });
+    //             } else {
+    //                 for (let j = 0; j < n; j++) {
+    //                     newMedTime.push({
+    //                         name: data[i]["medicine"],
+    //                         time: Math.round(8 + (14 / (n - 1)) * j),
+    //                     });
+    //                 }
+    //             }
+    //         }
+    //         console.log("NewMedTime: ", newMedTime);
+    //         newMedTime.sort((a, b) => a["time"] - b["time"]);
+    //         setMedTime(newMedTime);
+    //         console.log("MedTime: ", medTime);
+    //     },
+    //     [medTime]
+    // );
+
+    // const fetchData = useCallback(async () => {
+    //     // if ("email" in localStorage) {
+    //     //     console.log(
+    //     //         "Email in localStorage: ",
+    //     //         localStorage.getItem("email")
+    //     //     );
+    //     //     setUsername(localStorage.getItem("email"));
+    //     //     console.log("Username: ", username);
+    //     // }
+    //     const data = await fetch(
+    //         "http://127.0.0.1:8000/search-a-medicine?query=admin@gmail.com"
+    //     );
+    //     const json = await data.json();
+    //     setData(json);
+    //     // console.log(data);
+    // }, []);
+
     // useEffect(() => {
-        
-    // }, [checkArray])
+    //     fetchData().catch(console.error);
+    // }, [fetchData]);
 
     return (
-      <>
-        <Button variant="primary" onClick={handleShow}>
-          My Schedule
-        </Button>
-  
-        <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-                <Modal.Title>My Schedule</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Time</th>
-                            {/* <th>Done</th> */}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {medTime.map((item, index) => {
-                            return (
-                                <tr>
-                                    <th>{index+1}</th>
-                                    <th>{item['name']}</th>
-                                    <th>{item['time']+":00"}</th>
-                                    {/* <th>
-                                    <ToggleButton
-                                        className="mb-2"
-                                        id="toggle-check"
-                                        type="checkbox"
-                                        variant="outline-primary"
-                                        checked={checkArray[index]}
-                                        value="1"
-                                        onClick={() =>{
-                                            let temp = checkArray;
-                                            temp[index] = true;
-                                            setCheckArray(temp);
-                                        }}
-                                        >
-                                        Checked
-                                    </ToggleButton>
-                                    </th> */}
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </Table>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="primary" onClick={handleClose}>
-                    Close
-                </Button>
-            </Modal.Footer>
-        </Modal>
-      </>
+        <>
+            <Button variant="primary" onClick={handleShow}>
+                My Schedule
+            </Button>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>My Schedule</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Table striped bordered hover>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Time</th>
+                                {/* <th>Done</th> */}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.map((item, index) => {
+                                return (
+                                    // <tr key={index}>
+                                    //     <th>{index + 1}</th>
+                                    //     <th>{item["name"]}</th>
+                                    //     <th>{item["time"] + ":00"}</th>
+                                    // </tr>
+                                    <tr key={index}>
+                                        <th>{index + 1}</th>
+                                        <th>{item["medicine"]}</th>
+                                        <th>{item["times_of_day"] + ":00"}</th>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </Table>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
     );
 }
 
 function App() {
+    const [username, setUsername] = useState("admin@gmail.com");
+
     return (
         <div className="page">
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -323,8 +354,7 @@ function App() {
                     <Navbar.Brand href="#home">Med Tracker</Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
-                        <Nav className="me-auto">
-                        </Nav>
+                        <Nav className="me-auto"></Nav>
                         <Nav>
                             <Nav.Link href="#deets">Login</Nav.Link>
                             <Nav.Link eventKey={2} href="#memes">
@@ -354,8 +384,11 @@ function App() {
                                     Sign up now and let the good times roll
                                     (while feeling great, of course!)
                                 </Card.Text>
-                                {localStorage.getItem("email") === null ? "" : <ModalForSchedule/>}
-                                
+                                {localStorage.getItem("email") === null ? (
+                                    ""
+                                ) : (
+                                    <ModalForSchedule />
+                                )}
                             </Card.Body>
                         </Card>
                     </div>
