@@ -7,70 +7,12 @@ import Card from "react-bootstrap/Card";
 import React, { useEffect, useState, useCallback } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import Table from 'react-bootstrap/Table';
+import Table from "react-bootstrap/Table";
 
-
-function ListDrugs() {
-    const a = [{"name":"ethan", "description": "dumba", "maxPerDay": 0, "symptoms": "kkk"},
-    {"name":"ethasdflkja;sdlkfja;sldfj;alskdfj;al;dfalksjdf;klj;kj;fk;ajsdlkfja;lksdfjlk;asdjflk;asjdf;lkajsdf;lkajsdflk;asdf;lkj;lkjan", "description": "dumasdfasdfasdffasdj;flkjasdl;fkjalk;sdfja;lksdfj;laksdjflkajsdf;lkajsd;flkjas;dlfkjalk;sdfj;lkjasdfasdfhflaksdhflkajshdflkjahsdflkhalsdkfhalksdfhb", "maxPerDay": 1, "symptoms": "kkdfa;lskdfj;alksdjf;laksjdf;lkajdf;lkajsdf;lkjads;lfkjal;skdjf;alksdjf;laksjdf;lkajsdf;lkjasd;lfkja;sldkfj;lkj;kjk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
-    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkkasdfasdfasdf;jlkj;lkj;lk"},];
-    return (
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Medication</th>
-            <th>Description</th>
-            <th>Max per day</th>
-            <th>Symptoms</th>
-          </tr>
-        </thead>
-        <tbody>
-            {a.map((item, index) => {
-                return (<tr>
-                    <td>{ index + 1}</td>
-                    <td style = {{wordBreak: "break-all"}}>
-                        {a[index]["name"]}
-                    </td>
-                    <td style = {{wordBreak: "break-all"}}>
-                        {a[index]["description"]}
-                    </td>
-                    <td style = {{wordBreak: "break-all", minWidth: 120}}>
-                        {a[index]["maxPerDay"]}
-                    </td>
-                    <td style = {{wordBreak: "break-all"}}>
-                        {a[index]["symptoms"]}
-                    </td>
-                </tr>)
-            })}
-        </tbody>
-      </Table>
-    );
-  }
-  
 function ModalForPill() {
     const [show, setShow] = useState(false);
     const [querySearch, setQuerySearch] = useState("all");
+    const [updated, setUpdated] = useState(querySearch);
     const [listAllDrugs, setListAllDrugs] = useState([]);
 
     const handleClose = () => setShow(false);
@@ -78,17 +20,19 @@ function ModalForPill() {
     const handleChange = (event) => {
         setQuerySearch(event.target.value);
     };
+    const handleClick = () => {
+        setUpdated(querySearch);
+    };
 
     const fetchData = useCallback(async () => {
         const data = await fetch(
-            "http://127.0.0.1:8000/search-a-medicine?query=" + querySearch
+            "http://127.0.0.1:8000/search-a-medicine?query=" + updated
         );
         const json = await data.json();
         setListAllDrugs(json);
 
-        console.log("Query: ", querySearch);
-        console.log(listAllDrugs);
-    }, [querySearch, listAllDrugs]);
+        console.log("Query: ", updated);
+    }, [updated]);
 
     useEffect(() => {
         fetchData().catch(console.error);
@@ -104,16 +48,50 @@ function ModalForPill() {
                     <Modal.Title>List of common mediciations</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p>
-                        Search query:
-                        <input
-                            type={"text"}
-                            defaultValue=""
-                            onChange={handleChange}
-                            placeholder={"Symptoms, name, etc..."}
-                        />
-                    </p>
-                    <ListDrugs/>
+                    <input
+                        type={"text"}
+                        defaultValue=""
+                        onChange={handleChange}
+                        placeholder={"Symptoms, name, etc..."}
+                    />
+                    <button onClick={handleClick}>Search</button>
+                    <Table striped bordered hover>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Medication</th>
+                                <th>Description</th>
+                                <th>Max per day</th>
+                                <th>Symptoms</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {listAllDrugs.map((item, index) => {
+                                return (
+                                    <tr>
+                                        <td>{index + 1}</td>
+                                        <td style={{ wordBreak: "break-all" }}>
+                                            {listAllDrugs[index]["name"]}
+                                        </td>
+                                        <td style={{ wordBreak: "break-all" }}>
+                                            {listAllDrugs[index]["desc"]}
+                                        </td>
+                                        <td
+                                            style={{
+                                                wordBreak: "break-all",
+                                                minWidth: 120,
+                                            }}
+                                        >
+                                            {listAllDrugs[index]["max_per_day"]}
+                                        </td>
+                                        <td style={{ wordBreak: "break-all" }}>
+                                            {listAllDrugs[index]["symptoms"]}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </Table>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
