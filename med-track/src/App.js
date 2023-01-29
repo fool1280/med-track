@@ -278,7 +278,7 @@ function ModalForSchedule({ username }) {
 
     useEffect(() => {
         fetchData().catch(console.error);
-    }, [fetchData]);
+    }, [fetchData, show]);
 
     return (
         <>
@@ -433,8 +433,8 @@ function App() {
                         <Nav className="me-auto"></Nav>
                         <Nav>
                             {localStorage.getItem("email") === null ? (
-                                    <Nav.Link onClick={handleShow}>Login</Nav.Link>
-                                ) : (
+                                <Nav.Link onClick={handleShow}>Login</Nav.Link>
+                            ) : (
                                 ""
                             )}
                             <Modal show={show} onHide={handleClose}>
@@ -481,16 +481,21 @@ function App() {
                                 </Modal.Body>
                             </Modal>
                             {localStorage.getItem("email") === null ? (
-                                <Signup />):("")}
-                            {localStorage.getItem("email") === null ? 
+                                <Signup />
+                            ) : (
                                 ""
-                            : (
-                            <Nav.Link>{username}</Nav.Link>
                             )}
-                            {localStorage.getItem("email") === null ? 
+                            {localStorage.getItem("email") === null ? (
                                 ""
-                            : (
-                            <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                            ) : (
+                                <Nav.Link>{username}</Nav.Link>
+                            )}
+                            {localStorage.getItem("email") === null ? (
+                                ""
+                            ) : (
+                                <Nav.Link onClick={handleLogout}>
+                                    Logout
+                                </Nav.Link>
                             )}
                         </Nav>
                     </Navbar.Collapse>
@@ -527,7 +532,7 @@ function App() {
                     </div>
 
                     <div className="form">
-                        <Card style={{ width: "30rem"}}>
+                        <Card style={{ width: "30rem" }}>
                             <Card.Body>
                                 <Card.Title>Pill Suggestion</Card.Title>
                                 <Card.Text>
