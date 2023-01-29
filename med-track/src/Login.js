@@ -5,13 +5,32 @@ import Navbar from 'react-bootstrap/Navbar';
 import './Login.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import React, {useState} from 'react';
+import {useEffect} from 'react';
 
-function App() {
+
+export default function App() {
+
+  const [initialValues, setInitialValues] = useState({
+    username:"",
+    password:""
+  });
+  const [formValues, setFormValues] = useState([]);
+
+  const submitForm = () => {
+    setFormValues((prevFormValues) => [...prevFormValues,initialValues]);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("formValues",JSON.stringify(formValues));
+  }, [formValues]);
+
+
   return (
   <div>
 
 <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Container>
+        <Container style={{paddingLeft: 10, paddingRight: 10, margin: 0, maxWidth: 2000}}>
           <Navbar.Brand href="#home">Med Tracker</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
@@ -45,7 +64,13 @@ function App() {
           <Form.Label>Username:</Form.Label>
           </span>
           <div className="box">
-          <Form.Control type="email" placeholder="username" className="box"/>
+
+          <Form.Control type="email" placeholder="username" className="box" 
+            value={initialValues.username}
+            onChange={(e) =>
+              setInitialValues({...initialValues, username: e.target.value})
+              } />
+
           </div>
         </Form.Group>
 
@@ -54,12 +79,18 @@ function App() {
           <Form.Label>Password:</Form.Label>
           </span>
           <div className="box">
-          <Form.Control type="password" placeholder="password" className="box"/>
+
+          <Form.Control type="password" placeholder="password" className="box"
+          value={initialValues.password}
+          onChange={(e) =>
+            setInitialValues({...initialValues, password: e.target.value})
+            } />
+
           </div>
         </Form.Group>
 
         <div className="Button">
-        <Button variant="primary" type="submit">
+        <Button variant="primary" type="submit" onclick={submitForm}>
           Login
         </Button>
         </div>
@@ -73,4 +104,5 @@ function App() {
   );
 }
 
-export default App;
+
+

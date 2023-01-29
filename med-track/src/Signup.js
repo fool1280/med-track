@@ -11,7 +11,7 @@ function App() {
   <div>
 
 <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Container>
+        <Container style={{paddingLeft: 10, paddingRight: 10, margin: 0, maxWidth: 2000}}>
           <Navbar.Brand href="#home">Med Tracker</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
