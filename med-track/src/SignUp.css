@@ -1,0 +1,35 @@
+.main {
+    background-image:linear-gradient(to right,blue, white);
+    height:18in;
+    padding: 2.5in 6.5in 2in 6.5in;
+  }
+  
+  .sub {
+    background-color:white;
+    padding: 0.5in 1in 0.5in 1in;
+    border-radius:30px;
+  }
+  
+  .Login {
+    text-align: center;
+    font-size: 30px;
+  }
+  
+  .font {
+    font-family: 'Alegreya', cursive;
+  }
+  
+  .mb-3 {
+    font-size: 27px;
+    height:110px;
+  }
+  
+  .box {
+    border: 0;
+    box-shadow: 0 0 15px 4px rgba(0,0,0,0.06);
+  }
+  
+  .Button {
+    text-align: center;
+    align-items: center;
+  }
