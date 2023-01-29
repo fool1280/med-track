@@ -11,11 +11,15 @@ import Table from "react-bootstrap/Table";
 
 function ModalForPill() {
     const [show, setShow] = useState(false);
-    const [querySearch, setQuerySearch] = useState("all");
+    const [querySearch, setQuerySearch] = useState("");
     const [updated, setUpdated] = useState(querySearch);
     const [listAllDrugs, setListAllDrugs] = useState([]);
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false);
+        setQuerySearch("");
+        setUpdated("");
+    };
     const handleShow = () => setShow(true);
     const handleChange = (event) => {
         setQuerySearch(event.target.value);
@@ -70,22 +74,36 @@ function ModalForPill() {
                                 return (
                                     <tr>
                                         <td>{index + 1}</td>
-                                        <td style={{ wordBreak: "break-all" }}>
+                                        <td
+                                            style={{
+                                                wordBreak: "keep-all",
+                                            }}
+                                        >
                                             {listAllDrugs[index]["name"]}
                                         </td>
-                                        <td style={{ wordBreak: "break-all" }}>
+                                        <td
+                                            style={{
+                                                wordBreak: "keep-all",
+                                            }}
+                                        >
                                             {listAllDrugs[index]["desc"]}
                                         </td>
                                         <td
                                             style={{
-                                                wordBreak: "break-all",
+                                                wordBreak: "keep-all",
                                                 minWidth: 120,
                                             }}
                                         >
                                             {listAllDrugs[index]["max_per_day"]}
                                         </td>
-                                        <td style={{ wordBreak: "break-all" }}>
-                                            {listAllDrugs[index]["symptoms"]}
+                                        <td
+                                            style={{
+                                                wordBreak: "keep-all",
+                                            }}
+                                        >
+                                            {listAllDrugs[index][
+                                                "symptoms"
+                                            ].join(", ")}
                                         </td>
                                     </tr>
                                 );
@@ -96,9 +114,6 @@ function ModalForPill() {
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
-                    </Button>
-                    <Button variant="primary" onClick={handleClose}>
-                        Save Changes
                     </Button>
                 </Modal.Footer>
             </Modal>
