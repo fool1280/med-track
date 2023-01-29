@@ -8,6 +8,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Table from "react-bootstrap/Table";
+import ToggleButton from 'react-bootstrap/ToggleButton';
 import Form from "react-bootstrap/Form";
 
 function ModalForPill() {
@@ -209,7 +210,7 @@ function ModalForPill() {
                     </Table>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
+                    <Button variant="primary" onClick={handleClose}>
                         Close
                     </Button>
                     <Button variant="primary" onClick={handleCloseAndSubmit}>
@@ -218,6 +219,92 @@ function ModalForPill() {
                 </Modal.Footer>
             </Modal>
         </>
+    );
+}
+
+function ModalForSchedule() {
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    // const [checkArray, setCheckArray] = useState([])
+    const [data, setData] = useState([{'name': 'asdf;lkj', 'num': 4}, {'name': 'fdf', 'num':1}]);
+    
+    const medTime=[];
+    for (let i = 0; i < data.length; i++) {
+        let n = data[i]['num'];
+        if (n === 1) {
+            medTime.push({"name": data[i]["name"], "time": 12});
+        }
+        else {
+            for (let j = 0;j < n; j++) {
+                medTime.push({"name": data[i]["name"], "time": Math.round(8 + 14 / (n - 1) * j)})
+            }
+        }
+    }
+
+    medTime.sort((a, b) => a["time"] - b["time"]);
+    // useEffect(() => {
+        
+    // }, [checkArray])
+
+    return (
+      <>
+        <Button variant="primary" onClick={handleShow}>
+          My Schedule
+        </Button>
+  
+        <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+                <Modal.Title>My Schedule</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Table striped bordered hover>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Time</th>
+                            {/* <th>Done</th> */}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {medTime.map((item, index) => {
+                            return (
+                                <tr>
+                                    <th>{index+1}</th>
+                                    <th>{item['name']}</th>
+                                    <th>{item['time']+":00"}</th>
+                                    {/* <th>
+                                    <ToggleButton
+                                        className="mb-2"
+                                        id="toggle-check"
+                                        type="checkbox"
+                                        variant="outline-primary"
+                                        checked={checkArray[index]}
+                                        value="1"
+                                        onClick={() =>{
+                                            let temp = checkArray;
+                                            temp[index] = true;
+                                            setCheckArray(temp);
+                                        }}
+                                        >
+                                        Checked
+                                    </ToggleButton>
+                                    </th> */}
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </Table>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="primary" onClick={handleClose}>
+                    Close
+                </Button>
+            </Modal.Footer>
+        </Modal>
+      </>
     );
 }
 
@@ -237,7 +324,6 @@ function App() {
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link href="#features">Home</Nav.Link>
                         </Nav>
                         <Nav>
                             <Nav.Link href="#deets">Login</Nav.Link>
@@ -268,7 +354,8 @@ function App() {
                                     Sign up now and let the good times roll
                                     (while feeling great, of course!)
                                 </Card.Text>
-                                <Card.Link href="#">Card Link</Card.Link>
+                                {localStorage.getItem("email") === null ? "" : <ModalForSchedule/>}
+                                
                             </Card.Body>
                         </Card>
                     </div>
