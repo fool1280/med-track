@@ -43,8 +43,12 @@ def get_all_medicines():
 @app.route("/search-a-medicine")
 def search_a_medicine():
     query = request.args.get('query')
-    if query == "":
-        abort(404)
+    if query == "all" or query == "":
+        medications = db["medication"].find({})
+        return Response(
+            json_util.dumps(medications),
+            mimetype='application/json'
+        )
     medication = db["medication"].find({"$text": { "$search": query }})
     return Response(
         json_util.dumps(medication),

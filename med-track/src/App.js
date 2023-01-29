@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Card from "react-bootstrap/Card";
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Table from 'react-bootstrap/Table';
@@ -70,9 +70,29 @@ function ListDrugs() {
   
 function ModalForPill() {
     const [show, setShow] = useState(false);
+    const [querySearch, setQuerySearch] = useState("all");
+    const [listAllDrugs, setListAllDrugs] = useState([]);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const handleChange = (event) => {
+        setQuerySearch(event.target.value);
+    };
+
+    const fetchData = useCallback(async () => {
+        const data = await fetch(
+            "http://127.0.0.1:8000/search-a-medicine?query=" + querySearch
+        );
+        const json = await data.json();
+        setListAllDrugs(json);
+
+        console.log("Query: ", querySearch);
+        console.log(listAllDrugs);
+    }, [querySearch, listAllDrugs]);
+
+    useEffect(() => {
+        fetchData().catch(console.error);
+    }, [fetchData]);
     return (
         <>
             <Button variant="primary" onClick={handleShow}>
@@ -81,10 +101,18 @@ function ModalForPill() {
 
             <Modal className="modal-xl" show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title>List of common mediciations</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <input/>
+                    <p>
+                        Search query:
+                        <input
+                            type={"text"}
+                            defaultValue=""
+                            onChange={handleChange}
+                            placeholder={"Symptoms, name, etc..."}
+                        />
+                    </p>
                     <ListDrugs/>
                 </Modal.Body>
                 <Modal.Footer>
@@ -102,7 +130,7 @@ function ModalForPill() {
 
 function App() {
     return (
-        <div class="page">
+        <div className="page">
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                 <Container
                     style={{
@@ -127,41 +155,39 @@ function App() {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <div class="mid">
-                <div class="left">
-                    <div class="title">Med Tracker</div>
-                    <div class="description">The fastest way to recovery</div>
+            <div className="mid">
+                <div className="left">
+                    <div className="title">Med Tracker</div>
+                    <div className="description">
+                        The fastest way to recovery
+                    </div>
                 </div>
-                <div class="longDescription">
-                    <div class="form">
+                <div className="longDescription">
+                    <div className="form">
                         <Card style={{ width: "30rem" }}>
                             <Card.Body>
                                 <Card.Title>Scheduling</Card.Title>
                                 <Card.Text>
-                                    Do you ever forget to take your medication?
-                                    Our app will track all the medicine you need
-                                    to take and remind you throughout the day.
-                                    Feel the satisfaction of doing the right
-                                    thing, while getting better one pill at a
-                                    time. Make an account now to get started.
+                                    Say goodbye to forgotten pills and hello to
+                                    a fun and healthy life with our app! Our
+                                    reminders and rewards system will turn you
+                                    into a medication-taking pro in no time.
+                                    Sign up now and let the good times roll
+                                    (while feeling great, of course!)
                                 </Card.Text>
                                 <Card.Link href="#">Card Link</Card.Link>
                             </Card.Body>
                         </Card>
                     </div>
 
-                    <div class="form">
+                    <div className="form">
                         <Card style={{ width: "30rem" }}>
                             <Card.Body>
                                 <Card.Title>Pill Suggestion</Card.Title>
                                 <Card.Text>
-                                    Feeling sick and don't know what medication
-                                    to take? Simply conduct a search with any of
-                                    your symptoms and get everything you need to
-                                    know for a speedy recovery. Our database
-                                    contains a large variety of medications with
-                                    their pros and cons as well as maximum
-                                    dosages of each.
+                                    Feeling sick? Let our app be your personal
+                                    pharmacist! Search your symptoms, find the
+                                    perfect meds and get better in no time!
                                 </Card.Text>
                                 <ModalForPill />
                             </Card.Body>
