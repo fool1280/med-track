@@ -227,24 +227,31 @@ function ModalForSchedule({ username }) {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [data, setData] = useState([]);
+    const [check, setCheck] = useState({});
 
     const convertData = (data) => {
         console.log("Data: ", data);
+        let newCheck = {};
         let newMedTime = [];
+        let count = 0;
         for (let i = 0; i < data.length; i++) {
             console.log("Data at " + i, data[i]);
             let n = data[i]["times_of_day"];
             if (n === 1) {
                 newMedTime.push({ name: data[i]["medicine"], time: 12 });
+                newCheck[count++] = false;
             } else {
                 for (let j = 0; j < n; j++) {
                     newMedTime.push({
                         name: data[i]["medicine"],
                         time: Math.round(8 + (14 / (n - 1)) * j),
                     });
+                    newCheck[count++] = false;
                 }
             }
         }
+        setCheck(newCheck);
+        console.log("Check init: ", newCheck);
         console.log("NewMedTime: ", newMedTime);
         newMedTime.sort((a, b) => a["time"] - b["time"]);
         return newMedTime;
@@ -364,7 +371,11 @@ function App() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const [querySearch, setQuerySearch] = useState("");
+    const [querySearch, setQuerySearch] = useState(
+        localStorage.getItem("email") === null
+            ? ""
+            : localStorage.getItem("email")
+    );
     const [username, setUpdated] = useState(querySearch);
 
     const handleChange = (event) => {
@@ -373,7 +384,13 @@ function App() {
     };
     const handleClick = () => {
         setUpdated(querySearch);
+        localStorage.setItem("email", username);
         handleClose();
+    };
+    const handleLogout = () => {
+        localStorage.removeItem("email");
+        setQuerySearch("");
+        setUpdated("");
     };
 
     useEffect(() => {
@@ -440,6 +457,7 @@ function App() {
                                 </Modal.Body>
                             </Modal>
                             <Signup />
+                            <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
