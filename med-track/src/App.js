@@ -7,7 +7,67 @@ import Card from "react-bootstrap/Card";
 import React, { useEffect, useState, useCallback } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import Table from 'react-bootstrap/Table';
 
+
+function ListDrugs() {
+    const a = [{"name":"ethan", "description": "dumba", "maxPerDay": 0, "symptoms": "kkk"},
+    {"name":"ethasdflkja;sdlkfja;sldfj;alskdfj;al;dfalksjdf;klj;kj;fk;ajsdlkfja;lksdfjlk;asdjflk;asjdf;lkajsdf;lkajsdflk;asdf;lkj;lkjan", "description": "dumasdfasdfasdffasdj;flkjasdl;fkjalk;sdfja;lksdfj;laksdjflkajsdf;lkajsd;flkjas;dlfkjalk;sdfj;lkjasdfasdfhflaksdhflkajshdflkjahsdflkhalsdkfhalksdfhb", "maxPerDay": 1, "symptoms": "kkdfa;lskdfj;alksdjf;laksjdf;lkajdf;lkajsdf;lkjads;lfkjal;skdjf;alksdjf;laksjdf;lkajsdf;lkjasd;lfkja;sldkfj;lkj;kjk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkk"},
+    {"name":"ethan", "description": "dumb", "maxPerDay": 1, "symptoms": "kkkasdfasdfasdf;jlkj;lkj;lk"},];
+    return (
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Medication</th>
+            <th>Description</th>
+            <th>Max per day</th>
+            <th>Symptoms</th>
+          </tr>
+        </thead>
+        <tbody>
+            {a.map((item, index) => {
+                return (<tr>
+                    <td>{ index + 1}</td>
+                    <td style = {{wordBreak: "break-all"}}>
+                        {a[index]["name"]}
+                    </td>
+                    <td style = {{wordBreak: "break-all"}}>
+                        {a[index]["description"]}
+                    </td>
+                    <td style = {{wordBreak: "break-all", minWidth: 120}}>
+                        {a[index]["maxPerDay"]}
+                    </td>
+                    <td style = {{wordBreak: "break-all"}}>
+                        {a[index]["symptoms"]}
+                    </td>
+                </tr>)
+            })}
+        </tbody>
+      </Table>
+    );
+  }
+  
 function ModalForPill() {
     const [show, setShow] = useState(false);
     const [querySearch, setQuerySearch] = useState("all");
@@ -33,14 +93,13 @@ function ModalForPill() {
     useEffect(() => {
         fetchData().catch(console.error);
     }, [fetchData]);
-
     return (
         <>
             <Button variant="primary" onClick={handleShow}>
                 Search
             </Button>
 
-            <Modal show={show} onHide={handleClose}>
+            <Modal className="modal-xl" show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>List of common mediciations</Modal.Title>
                 </Modal.Header>
@@ -54,7 +113,7 @@ function ModalForPill() {
                             placeholder={"Symptoms, name, etc..."}
                         />
                     </p>
-                    <div>Woohoo, you're reading this text in a modal!</div>
+                    <ListDrugs/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
