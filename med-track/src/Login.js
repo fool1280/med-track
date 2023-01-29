@@ -7,25 +7,75 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import React, {useState} from 'react';
 import {useEffect} from 'react';
+import Modal from 'react-bootstrap/Modal';
 
 
-export default function App() {
+function Login() {
+  const [show, setShow] = useState(false);
 
-  const [initialValues, setInitialValues] = useState({
-    username:'',
-    password:''
-  });
-  const [formValues, setFormValues] = useState([]);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
-  const submitForm = () => {
-    console.log(initialValues)
-    setFormValues((prevFormValues) => [...prevFormValues,initialValues]);
-  };
+  return (
+    <>
+      <Button variant="primary" onClick={handleShow}>
+        Launch demo modal
+      </Button>
 
-  useEffect(() => {
-    localStorage.setItem("formValues",JSON.stringify(formValues));
-    console.log(localStorage)
-  }, [formValues]);
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="name@example.com"
+                autoFocus
+              />
+            </Form.Group>
+            <Form.Group
+              className="mb-3"
+              controlId="exampleForm.ControlTextarea1"
+            >
+              <Form.Label>Example textarea</Form.Label>
+              <Form.Control as="textarea" rows={3} />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+}
+
+
+function App() {
+
+  // const [initialValues, setInitialValues] = useState({
+  //   username:'',
+  //   password:''
+  // });
+  // const [formValues, setFormValues] = useState([]);
+
+  // const submitForm = () => {
+  //   console.log(initialValues)
+  //   setFormValues((prevFormValues) => [...prevFormValues,initialValues]);
+  // };
+
+  // useEffect(() => {
+  //   localStorage.setItem("formValues",JSON.stringify(formValues));
+  //   console.log(localStorage)
+  // }, [formValues]);
 
   
 
@@ -67,10 +117,11 @@ export default function App() {
           <div className="box">
 
           <Form.Control type="email" placeholder="username" className="box" 
-            value={initialValues.username}
-            onChange={(e) =>
-              setInitialValues({...initialValues, username: e.target.value})
-              } />
+            // value={initialValues.username}
+            // onChange={(e) =>
+            //   setInitialValues({...initialValues, username: e.target.value})
+            //   } 
+            />
 
           </div>
         </Form.Group>
@@ -82,16 +133,19 @@ export default function App() {
           <div className="box">
 
           <Form.Control type="password" placeholder="password" className="box"
-          value={initialValues.password}
-          onChange={(e) =>
-            setInitialValues({...initialValues, password: e.target.value})
-            } />
+          // value={initialValues.password}
+          // onChange={(e) =>
+          //   setInitialValues({...initialValues, password: e.target.value})
+          //   }
+           />
 
           </div>
         </Form.Group>
 
         <div className="Button">
-        <Button variant="primary" type="submit" onClick={submitForm}>
+        <Button variant="primary" type="submit" 
+        // onClick={submitForm}
+        >
           Login
         </Button>
         </div>
@@ -103,3 +157,7 @@ export default function App() {
       </div>
   );
 }
+
+
+
+export default App;
