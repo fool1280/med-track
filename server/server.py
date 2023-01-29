@@ -64,6 +64,10 @@ def add_medicine():
     # stopped_date: unix timestamp
 
     data = request.get_json()
+    if "record" in data:
+        data = data["record"]
+    else:
+        return Response(status=404)
     if "username" in data and "medicine" in data and "times_of_day" in data and "stopped_date" in data:
         record = {
             "username": data["username"],
@@ -71,6 +75,7 @@ def add_medicine():
             "times_of_day": data["times_of_day"],
             "stopped_date": data["stopped_date"], 
         }
+        print(record)
         found = db["medication"].find_one({"name": re.compile('^' + re.escape(data["medicine"]) + '$', re.IGNORECASE)})
         if found is None:
             return Response(status=404)
