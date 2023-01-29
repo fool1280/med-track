@@ -344,9 +344,7 @@ function Signup() {
 
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
-                Signup
-            </Button>
+            <Nav.Link onClick={handleShow}>Signup</Nav.Link>
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
@@ -393,10 +391,7 @@ function App() {
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto"></Nav>
                         <Nav>
-                            <Button variant="primary" onClick={handleShow}>
-                                Login
-                            </Button>
-
+                            <Nav.Link onClick={handleShow}>Login</Nav.Link>
                             <Modal show={show} onHide={handleClose}>
                                 <Modal.Header closeButton>
                                     <Modal.Title>Login</Modal.Title>
